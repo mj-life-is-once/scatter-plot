@@ -42,7 +42,9 @@ const Plotter = (props: Props) => {
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter">
             D3 Scatter Plot
           </h1>
-          <p className="text-lg max-w-md mx-auto">with (SVG + Canvas)</p>
+          <p className="text-lg max-w-md mx-auto font-extrabold text-slate-300">
+            with (SVG + Canvas)
+          </p>
           <div className="m-3">
             <Box sx={{ "& > :not(style)": { m: 1 } }}>
               <Fab
