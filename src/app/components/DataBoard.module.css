@@ -1,0 +1,12 @@
+.dataBoard {
+  height: 400px;
+  width: 100%;
+}
+
+.dataBoard > div {
+  /* color: "white"; */
+}
+
+.smiles {
+  text-align: left;
+}
