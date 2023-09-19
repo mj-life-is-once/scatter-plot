@@ -1,44 +1,48 @@
-import fs from "fs";
+"use client";
+import { useRef, useEffect, useState } from "react";
 
-// const getData = async () => {
-//   const tileFolders = await matchRegex(`${BASE_URL}/`, /href="([0-9]*)\/"/g);
-//   //   console.log(tileFolders);
-//   for (let j = 5; j < tileFolders.length; j++) {
-//     const tileFolder = tileFolders[j];
+// https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-web-worker?file=pages%2Findex.tsx
 
-//     const subFolders = await matchRegex(
-//       `${BASE_URL}/${tileFolder}/`,
-//       /href="([0-9]*)\/"/g
-//     );
-//     for (let i = 0; i < subFolders.length; i++) {
-//       const subFolder = subFolders[i];
+const Page = () => {
+  const workerRef = useRef<Worker>();
+  const [bigData, setBigData] = useState([]);
+  const [showLoading, setShowLoading] = useState(true);
 
-//       const files = await matchRegex(
-//         `${BASE_URL}/${tileFolder}/${subFolder}/`,
-//         /href="([0-9]*.tsv)"/g
-//       );
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("../helper/streamingTSVParser.ts", import.meta.url)
+    );
 
-//       for (let k = 0; k < files.length; k++) {
-//         const file = files[k];
-//         const fileUrl = `${BASE_URL}/${tileFolder}/${subFolder}/${file}`;
-//         console.log(fileUrl);
-//         await pause(500);
+    workerRef.current.onmessage = ({
+      data: { items, totalBytes, finished },
+    }) => {
+      const rows = items
+        .map((d: any) => ({
+          ...d,
+          x: Number(d.x),
+          y: Number(d.y),
+          year: Number(d.date),
+        }))
+        .filter((d: any) => d.year);
 
-//         const fileData = await fetch("http://localhhost:3000/api/hathi");
-//         console.log(fileData);
-//         // fs.writeFileSync(
-//         //   `data/${tileFolder}-${subFolder}-${file}`,
-//         //   fileData.data
-//         // );
-//       }
-//     }
-//   }
-// };
+      setBigData((data) => data.concat(rows));
 
-const Page = async () => {
+      if (finished) {
+        console.log("finished loading data");
+        setShowLoading(false);
+      }
+    };
+
+    workerRef.current.postMessage("./src/data/data.tsv");
+
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
+
   return (
-    <section className="relative">
-      <div className="container max-w-3xl mx-auto my-10 px-4 py-4 sm:px-6">
+    <section className="relative w-full h-full bg-blue-400">
+      <div className="max-w-3xl pt-20 mx-auto px-4 py-4 sm:px-6">
         <div className="text-center pb-12 md:pb-16">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
@@ -49,6 +53,13 @@ const Page = async () => {
           </p>
         </div>
       </div>
+      {showLoading && (
+        <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+            Loading Data ...
+          </h1>
+        </div>
+      )}
     </section>
   );
 };

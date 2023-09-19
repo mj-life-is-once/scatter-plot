@@ -1,14 +1,13 @@
 import * as d3 from "d3";
-import { SampleData } from "../types/types";
 
 export const quadSearch = (
-  quadtree: d3.Quadtree<SampleData>,
+  quadtree: d3.Quadtree<any>,
   x: number,
   y: number,
   radius: number
 ) => {
   //console.log(xmin, ymin, xmax, ymax);
-  const found: Array<SampleData> = [];
+  const found: Array<any> = [];
 
   // Visit the quadtree from the top, recursively
   quadtree.visit(
