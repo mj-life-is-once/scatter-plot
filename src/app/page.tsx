@@ -4,7 +4,7 @@ import { SampleData } from "./types/types";
 import Plotter from "./components/Plotter";
 import { parse } from "papaparse";
 
-export const getCSVData = async (f: string) => {
+const getCSVData = async (f: string) => {
   const filePath = path.join(process.cwd(), f);
   const file = await fsPromises.readFile(filePath, "utf-8");
   const { data } = parse(file, {
@@ -19,7 +19,7 @@ interface Time {
   datetime: string;
 }
 
-export const getTime = async (): Promise<Time> => {
+const getTime = async (): Promise<Time> => {
   const res = await fetch(
     "http://worldtimeapi.org/api/timezone/Europe/London",
     {
