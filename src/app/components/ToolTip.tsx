@@ -4,7 +4,6 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Slider from "@mui/material/Slider";
 import EnhancedTable from "./DataBoard";
 import { SampleData } from "../types/types";
-import c from "./ToolTip.module.css";
 
 const marks = [
   {
@@ -36,44 +35,47 @@ const ToolTip = ({
     }
   };
   return (
-    <div className={`${c.tooltip} ${className || ""}}`}>
-      <div className={c.titleBox}>
-        <h1>toolbox</h1>
-        <ul>
+    <div
+      className={`text-center p-3 mx-2 my-1 max-w-2xl lg:max-w-xl rounded-md bg-slate-800  ${
+        className || ""
+      }}`}
+    >
+      <div className="text-center m-2 ">
+        <h3 className="md:text-4xl uppercase font-extrabold m-5">toolbox</h3>
+        <ul className="max-w-xl text-center list-none m-auto">
           <li>Use Mouse-wheel to scroll</li>
           <li>Adjust radius to search more datapoints</li>
           <li>Click to create a table</li>
         </ul>
       </div>
 
-      <div className={c.allTools}>
-        <div className={c.toolGroup}>
-          <div className={c.sliderGroup}>
-            <div>
-              <p>{`Search Radius: ${value} px`}</p>
-            </div>
-            <Slider
-              defaultValue={10}
-              valueLabelDisplay="auto"
-              min={10}
-              max={100}
-              marks={marks}
-              onChange={onSliderChange}
-            />
+      <div className="flex flex-row flex-wrap content-center item-center p-10 justify-around">
+        <div>
+          <div>
+            <p>{`Search Radius: ${value} px`}</p>
           </div>
-          <div className={c.ButtonGroup}>
-            <ButtonGroup
-              orientation="vertical"
-              aria-label="vertical outlined button group"
-            >
-              <Button id="reset" onClick={reset}>
-                Reset
-              </Button>
-            </ButtonGroup>
-          </div>
+          <Slider
+            defaultValue={10}
+            valueLabelDisplay="auto"
+            min={10}
+            max={100}
+            marks={marks}
+            onChange={onSliderChange}
+          />
         </div>
-        <EnhancedTable data={data} />
+        <div className="self-center">
+          <ButtonGroup
+            orientation="vertical"
+            aria-label="vertical outlined button group"
+          >
+            <Button id="reset" onClick={reset}>
+              Reset
+            </Button>
+          </ButtonGroup>
+        </div>
       </div>
+
+      <EnhancedTable data={data} />
     </div>
   );
 };

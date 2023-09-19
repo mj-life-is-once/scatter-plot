@@ -14,7 +14,7 @@ import { Canvas2DContext } from "../context/CanvasContextProvider";
 import { quadSearch } from "../helper/quadTreeHelper";
 
 const pointColor = "#3585ff";
-const selectedColor = "#b7ff00";
+const selectedColor = "#facc15";
 
 const margin = { top: 50, right: 50, bottom: 50, left: 50 };
 const outerWidth = 600;
