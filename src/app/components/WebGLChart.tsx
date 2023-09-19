@@ -1,6 +1,7 @@
 "use client";
 import * as fc from "d3fc";
 import * as d3 from "d3";
+import "./WebGLChart.css";
 
 //https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer/blob/master/index.js
 
@@ -8,6 +9,7 @@ import { useEffect, useMemo, useRef, MutableRefObject } from "react";
 
 interface ChartProps {
   data: any[];
+  className?: string;
 }
 const WebGLChart = (props: ChartProps) => {
   //   const chartContainerRef =;
@@ -27,18 +29,14 @@ const WebGLChart = (props: ChartProps) => {
   //   const yScaleOriginal = useMemo(() => yScale.copy(), [yScale]);
 
   useEffect(() => {
-    //console.log(props.data);
+    console.log(props.data);
     const xScale = d3.scaleLinear().domain([-50, 50]);
     const yScale = d3.scaleLinear().domain([-50, 50]);
     const xScaleOriginal = xScale.copy();
     const yScaleOriginal = yScale.copy();
 
-    // chartContainerRef.current = d3.select("#chart");
-
     const pointSeries = fc
       .seriesWebglPoint()
-      .equals((a: any, b: any) => a === b)
-      .size(1)
       .crossValue((d: any) => d.x)
       .mainValue((d: any) => d.y);
 
@@ -54,38 +52,24 @@ const WebGLChart = (props: ChartProps) => {
 
     const chart = fc
       .chartCartesian(xScale, yScale)
-      .webglPlotArea(
-        // only render the point series on the WebGL layer
-        fc
-          .seriesWebglMulti()
-          .series([pointSeries])
-          .mapping((d: any) => d.data)
-      )
-      //   .svgPlotArea(
-      //     // only render the annotations series on the SVG layer
-      //     fc
-      //       .seriesSvgMulti()
-      //       .series([annotationSeries])
-      //       .mapping((d: any) => d.annotations)
-      //   )
-      .decorate(
-        (sel) =>
-          sel
-            .enter()
-            .select("d3fc-svg.plot-area")
-            .on("measure.range", (event) => {
-              xScaleOriginal.range([0, event.detail.width]);
-              yScaleOriginal.range([event.detail.height, 0]);
-            })
-            .call(zoom)
-        //   .call(pointer)
+      .webglPlotArea(pointSeries)
+      .decorate((sel) =>
+        sel
+          .enter()
+          .select("d3fc-svg.plot-area")
+          .on("measure.range", (event) => {
+            xScaleOriginal.range([0, event.detail.width]);
+            yScaleOriginal.range([event.detail.height, 0]);
+          })
+          .call(zoom)
       );
-
     const redraw = () => {
-      d3.select("#chart").call(chart);
+      d3.select("#chart").datum(props.data).call(chart);
     };
-  }, [props.data]);
-  return <div id="chart"></div>;
+
+    redraw();
+  }, [props.data, quadtree]);
+  return <div id="chart" className={props.className ?? ""}></div>;
 };
 
 export default WebGLChart;
