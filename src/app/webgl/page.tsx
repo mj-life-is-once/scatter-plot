@@ -1,5 +1,8 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const WebGLChart = dynamic(() => import("../components/WebGLChart"));
 
 // https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-web-worker?file=pages%2Findex.tsx
 
@@ -33,7 +36,7 @@ const Page = () => {
       }
     };
 
-    workerRef.current.postMessage("./src/data/data.tsv");
+    workerRef.current.postMessage("data.tsv");
 
     return () => {
       workerRef.current?.terminate();
@@ -51,6 +54,7 @@ const Page = () => {
             This page explores the different ways to visualise data despending
             on the number of datapoints
           </p>
+          <WebGLChart data={bigData} />
         </div>
       </div>
       {showLoading && (

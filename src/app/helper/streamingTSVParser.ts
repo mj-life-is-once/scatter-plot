@@ -1,3 +1,5 @@
+// import { createReadStream } from "fs";
+
 const tsvChunkedParser = () => {
   const textDecoder = new TextDecoder("utf-8");
   let columnHeadings: string[];
@@ -6,6 +8,7 @@ const tsvChunkedParser = () => {
   return {
     parseChunk(chunk: any) {
       // decode and split into lines
+      // console.log(chunk);
       const textData = textDecoder.decode(chunk) + previousChunk;
       const lines = textData.split("\n");
 
@@ -18,6 +21,7 @@ const tsvChunkedParser = () => {
       previousChunk = lines.pop() || "";
 
       // convert each row to an object
+
       const items = lines
         .map((row) => {
           const cells = row.split("\t"); // separated with tap
@@ -39,10 +43,11 @@ const tsvChunkedParser = () => {
 
 // The onmessage event occurs when a message is received through an event source.
 onmessage = async ({ data: filename }) => {
+  console.log(filename);
   let totalBytes = 0;
 
   const tsvParser = tsvChunkedParser();
-  const response = await fetch(filename);
+  const response = await fetch(`http://localhost:3000/${filename}`);
 
   if (!response.body) {
     throw Error("ReadableStream not yet supported in this browser.");
@@ -55,6 +60,7 @@ onmessage = async ({ data: filename }) => {
 
         const read = async () => {
           const { done, value } = await reader.read();
+          //console.log(done, value);
           if (done) {
             controller.close();
             return;
