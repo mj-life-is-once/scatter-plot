@@ -1,53 +1,18 @@
-import fsPromises from "fs/promises";
-import path from "path";
-import { SampleData } from "./types/types";
-import Plotter from "./components/Plotter";
-import { parse } from "papaparse";
-
-const getCSVData = async (f: string) => {
-  const filePath = path.join(process.cwd(), f);
-  const file = await fsPromises.readFile(filePath, "utf-8");
-  const { data } = parse(file, {
-    header: true,
-    skipEmptyLines: true,
-  });
-
-  return data;
-};
-
-interface Time {
-  datetime: string;
-}
-
-const getTime = async (): Promise<Time> => {
-  const res = await fetch(
-    "http://worldtimeapi.org/api/timezone/Europe/London",
-    {
-      next: {
-        revalidate: 5,
-      },
-    }
-  );
-
-  return res.json();
-};
-
 const Page = async () => {
-  const sampleData = getCSVData("./src/files/sample.csv") as Promise<
-    Array<SampleData>
-  >;
-  const time = getTime() as Promise<Time>;
-  const [promiseData, promiseTime] = await Promise.all([sampleData, time]);
-
   return (
-    <>
-      <h1
-        style={{ textAlign: "center", fontSize: "small", paddingTop: "2rem" }}
-      >
-        {promiseTime.datetime}
-      </h1>
-      <Plotter data={promiseData} />
-    </>
+    <section className="relative">
+      <div className="container max-w-3xl mx-auto my-10 px-4 py-4 sm:px-6">
+        <div className="text-center pb-12 md:pb-16">
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+            D3JS Experiments
+          </h1>
+          <p className="text-lg  max-w-md mx-auto">
+            This page explores the different ways to visualise data despending
+            on the number of datapoints
+          </p>
+        </div>
+      </div>
+    </section>
   );
 };
 
