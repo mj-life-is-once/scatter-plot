@@ -5,14 +5,7 @@ import "./WebGLChart.css";
 
 //https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer/blob/master/index.js
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  MutableRefObject,
-  useState,
-  useCallback,
-} from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 
 interface ChartProps {
   data: any[];
@@ -38,7 +31,7 @@ const WebGLChart = (props: ChartProps) => {
 
   const redraw = useCallback(
     async (chart: any) => {
-      console.log("redraw", data);
+      //   console.log("redraw", data);
       d3.select("#chart").datum(data).call(chart);
     },
     [data, callDraw]
@@ -108,20 +101,23 @@ const WebGLChart = (props: ChartProps) => {
       .crossValue((d: any) => d.x)
       .mainValue((d: any) => d.y);
 
+    // zoom needs to be called whenever data changes
     const zoom = d3
       .zoom()
       .scaleExtent([0.8, 10])
       .on("zoom", (event: any) => {
         // update the scales based on current zoom
-        console.log("zoom called");
+        // console.log("zoom called");
         xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
         yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
-        redraw(chart);
+        // console.log("onzoom", data);
+        setCallDraw((draw) => -1 * draw); // needs to be forcefully called..
+        // redraw(chart);
       });
 
     const chart = fc
       .chartCartesian(xScale, yScale)
-      .webglPlotArea(pointSeries)
+      .webglPlotArea(fc.seriesWebglMulti().series([pointSeries]))
       .decorate((sel) =>
         sel
           .enter()
@@ -137,14 +133,14 @@ const WebGLChart = (props: ChartProps) => {
   }, [data, quadtree, redraw, xScale, xScaleOriginal, yScale, yScaleOriginal]);
   return (
     <>
-      <button
+      {/* <button
         onClick={() => {
           console.log("clicked", data);
-          setCallDraw((draw) => draw + 1);
+          setCallDraw((draw) => -1 * draw);
         }}
       >
         data
-      </button>
+      </button> */}
       <div id="chart" className={props.className ?? ""}></div>
     </>
   );
