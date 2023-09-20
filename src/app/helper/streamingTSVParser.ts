@@ -55,7 +55,9 @@ onmessage = async ({ data: filename }) => {
   };
 
   const tsvParser = tsvChunkedParser();
-  const response = await fetch(`${url()}/${filename}`, { mode: "no-cors" });
+  const response = await fetch(`http://localhost:3000/${filename}`, {
+    mode: "no-cors",
+  });
   // const response = await fetch(
   //   "https://drive.google.com/uc?id=1gaFhxIw6j4p3wryp5AMOBX4BCJ0XMTIj",
   //   { mode: "no-cors" }
