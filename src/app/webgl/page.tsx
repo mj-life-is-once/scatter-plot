@@ -1,44 +1,54 @@
-import fs from "fs";
+"use client";
+import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
-// const getData = async () => {
-//   const tileFolders = await matchRegex(`${BASE_URL}/`, /href="([0-9]*)\/"/g);
-//   //   console.log(tileFolders);
-//   for (let j = 5; j < tileFolders.length; j++) {
-//     const tileFolder = tileFolders[j];
+const WebGLChart = dynamic(() => import("../components/WebGLChart"), {
+  ssr: false,
+});
 
-//     const subFolders = await matchRegex(
-//       `${BASE_URL}/${tileFolder}/`,
-//       /href="([0-9]*)\/"/g
-//     );
-//     for (let i = 0; i < subFolders.length; i++) {
-//       const subFolder = subFolders[i];
+// https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-web-worker?file=pages%2Findex.tsx
 
-//       const files = await matchRegex(
-//         `${BASE_URL}/${tileFolder}/${subFolder}/`,
-//         /href="([0-9]*.tsv)"/g
-//       );
+const Page = () => {
+  const workerRef = useRef<Worker>();
+  const [bigData, setBigData] = useState([]);
+  const [showLoading, setShowLoading] = useState(true);
 
-//       for (let k = 0; k < files.length; k++) {
-//         const file = files[k];
-//         const fileUrl = `${BASE_URL}/${tileFolder}/${subFolder}/${file}`;
-//         console.log(fileUrl);
-//         await pause(500);
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("../helper/streamingTSVParser.ts", import.meta.url)
+    );
 
-//         const fileData = await fetch("http://localhhost:3000/api/hathi");
-//         console.log(fileData);
-//         // fs.writeFileSync(
-//         //   `data/${tileFolder}-${subFolder}-${file}`,
-//         //   fileData.data
-//         // );
-//       }
-//     }
-//   }
-// };
+    workerRef.current.onmessage = ({
+      data: { items, totalBytes, finished },
+    }) => {
+      const rows = items
+        .map((d: any) => ({
+          ...d,
+          x: Number(d.x),
+          y: Number(d.y),
+          year: Number(d.date),
+        }))
+        .filter((d: any) => d.year);
 
-const Page = async () => {
+      setBigData((data) => data.concat(rows));
+
+      if (finished) {
+        console.log("finished loading data");
+        setShowLoading(false);
+      }
+    };
+
+    workerRef.current.postMessage("data.tsv");
+
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
+
   return (
-    <section className="relative">
-      <div className="container max-w-3xl mx-auto my-10 px-4 py-4 sm:px-6">
+    <section className="relative w-full h-full bg-blue-400">
+      <div className="flex flex-col justify-center w-full h-full pt-20 mx-auto px-4 py-4 sm:px-6">
         <div className="text-center pb-12 md:pb-16">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
@@ -48,15 +58,26 @@ const Page = async () => {
             on the number of datapoints
           </p>
         </div>
+        <WebGLChart className="px-10" data={bigData} />
       </div>
+      {/* <Suspense
+        fallback={
+          <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
+            <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+              Loading Data ...
+            </h1>
+          </div>
+        }
+      ></Suspense> */}
+      {showLoading && (
+        <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+            Loading Data ...
+          </h1>
+        </div>
+      )}
     </section>
   );
 };
 
 export default Page;
-
-/*
-
-()();
-
-*/
