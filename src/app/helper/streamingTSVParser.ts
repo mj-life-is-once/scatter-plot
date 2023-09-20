@@ -45,9 +45,12 @@ const tsvChunkedParser = () => {
 onmessage = async ({ data: filename }) => {
   console.log(filename);
   let totalBytes = 0;
-
+  const url =
+    "development" === process.env.NEXT_PUBLIC_ENV
+      ? "http://localhost:3000/"
+      : "https://scatter-plot-pi.vercel.app/";
   const tsvParser = tsvChunkedParser();
-  const response = await fetch(`http://localhost:3000/${filename}`);
+  const response = await fetch(`${url}/${filename}`);
   // const response = await fetch(
   //   "https://drive.google.com/uc?id=1gaFhxIw6j4p3wryp5AMOBX4BCJ0XMTIj",
   //   { mode: "no-cors" }
