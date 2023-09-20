@@ -14,6 +14,7 @@ const getData = async (url: string) => {
 };
 
 export async function GET() {
+  /*
   const tileFolders = await matchRegex(`${BASE_URL}/`, /href="([0-9]*)\/"/g);
   console.log("tileFolders", tileFolders);
 
@@ -42,9 +43,9 @@ export async function GET() {
         const fileData = await getData(fileUrl);
         // const dirPath = path.join(__dirname, "/data");
         // console.log(dirPath);
-        // writeFileSync(`src/data/${tileFolder}-${subFolder}-${file}`, fileData);
+        writeFileSync(`src/data/${tileFolder}-${subFolder}-${file}`, fileData);
       }
     }
-  }
+  }*/
   return NextResponse.json({ message: "hello" });
 }
