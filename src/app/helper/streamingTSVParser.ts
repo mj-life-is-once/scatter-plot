@@ -46,16 +46,19 @@ onmessage = async ({ data: filename }) => {
   // console.log(filename);
   let totalBytes = 0;
   const url = () => {
+    // console.log("environment", process.env.NEXT_PUBLIC_VERCEL_ENV);
     if ("development" === process.env.NEXT_PUBLIC_VERCEL_ENV)
       return "http://localhost:3000";
     else if ("production" === process.env.NEXT_PUBLIC_VERCEL_ENV)
       return `https://scatter-plot-pi.vercel.app`;
     // preview
-    else return `https://scatter-plot-git-dev-mj-life-is-once.vercel.app`;
+    else if ("preview" === process.env.NEXT_PUBLIC_VERCEL_ENV)
+      return `https://scatter-plot-git-dev-mj-life-is-once.vercel.app`;
+    else return "http://localhost:3000";
   };
 
   const tsvParser = tsvChunkedParser();
-  const response = await fetch(`http://localhost:3000/${filename}`, {
+  const response = await fetch(`${url()}/${filename}`, {
     mode: "no-cors",
   });
   // const response = await fetch(
