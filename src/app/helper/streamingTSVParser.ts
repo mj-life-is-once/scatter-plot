@@ -49,13 +49,13 @@ onmessage = async ({ data: filename }) => {
     if ("development" === process.env.NEXT_PUBLIC_VERCEL_ENV)
       return "http://localhost:3000";
     else if ("production" === process.env.NEXT_PUBLIC_VERCEL_ENV)
-      return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+      return `https://scatter-plot-pi.vercel.app`;
     // preview
-    else return `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`;
+    else return `https://scatter-plot-git-dev-mj-life-is-once.vercel.app`;
   };
 
   const tsvParser = tsvChunkedParser();
-  const response = await fetch(`${url}/${filename}`, { mode: "no-cors" });
+  const response = await fetch(`${url()}/${filename}`, { mode: "no-cors" });
   // const response = await fetch(
   //   "https://drive.google.com/uc?id=1gaFhxIw6j4p3wryp5AMOBX4BCJ0XMTIj",
   //   { mode: "no-cors" }
