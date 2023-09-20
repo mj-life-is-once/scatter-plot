@@ -43,12 +43,17 @@ const tsvChunkedParser = () => {
 
 // The onmessage event occurs when a message is received through an event source.
 onmessage = async ({ data: filename }) => {
-  console.log(filename);
+  // console.log(filename);
   let totalBytes = 0;
-  const url =
-    "development" === process.env.NEXT_PUBLIC_ENV
-      ? "http://localhost:3000/"
-      : "https://scatter-plot-git-dev-mj-life-is-once.vercel.app/";
+  const url = () => {
+    if ("development" === process.env.NEXT_PUBLIC_VERCEL_ENV)
+      return "http://localhost:3000";
+    else if ("production" === process.env.NEXT_PUBLIC_VERCEL_ENV)
+      return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    // preview
+    else return `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`;
+  };
+
   const tsvParser = tsvChunkedParser();
   const response = await fetch(`${url}/${filename}`, { mode: "no-cors" });
   // const response = await fetch(
