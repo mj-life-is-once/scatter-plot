@@ -42,7 +42,7 @@ export async function GET() {
         const fileData = await getData(fileUrl);
         // const dirPath = path.join(__dirname, "/data");
         // console.log(dirPath);
-        writeFileSync(`src/data/${tileFolder}-${subFolder}-${file}`, fileData);
+        // writeFileSync(`src/data/${tileFolder}-${subFolder}-${file}`, fileData);
       }
     }
   }
