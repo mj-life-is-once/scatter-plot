@@ -48,7 +48,12 @@ onmessage = async ({ data: filename }) => {
 
   const tsvParser = tsvChunkedParser();
   const response = await fetch(`http://localhost:3000/${filename}`);
+  // const response = await fetch(
+  //   "https://drive.google.com/uc?id=1gaFhxIw6j4p3wryp5AMOBX4BCJ0XMTIj",
+  //   { mode: "no-cors" }
+  // );
 
+  console.log(response);
   if (!response.body) {
     throw Error("ReadableStream not yet supported in this browser.");
   }

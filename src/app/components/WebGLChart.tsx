@@ -5,38 +5,106 @@ import "./WebGLChart.css";
 
 //https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer/blob/master/index.js
 
-import { useEffect, useMemo, useRef, MutableRefObject } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  MutableRefObject,
+  useState,
+  useCallback,
+} from "react";
 
 interface ChartProps {
   data: any[];
   className?: string;
 }
 const WebGLChart = (props: ChartProps) => {
-  //   const chartContainerRef =;
-
+  const [data, setData] = useState(props.data);
+  const [callDraw, setCallDraw] = useState(0);
   const quadtree = useMemo(
     () =>
       d3
         .quadtree()
         .x((d: any) => d.x)
         .y((d: any) => d.y)
-        .addAll(props.data),
-    [props.data]
+        .addAll(data),
+    [data]
   );
-  //   const xScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
-  //   const yScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
-  //   const xScaleOriginal = useMemo(() => xScale.copy(), [xScale]);
-  //   const yScaleOriginal = useMemo(() => yScale.copy(), [yScale]);
+
+  const xScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
+  const yScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
+  const xScaleOriginal = useMemo(() => xScale.copy(), [xScale]);
+  const yScaleOriginal = useMemo(() => yScale.copy(), [yScale]);
+
+  const redraw = useCallback(
+    async (chart: any) => {
+      console.log("redraw", data);
+      d3.select("#chart").datum(data).call(chart);
+    },
+    [data, callDraw]
+  );
+
+  //   const pointSeries = useMemo(
+  //     () =>
+  //       fc
+  //         .seriesWebglPoint()
+  //         .equals(
+  //           (previousData: any, currentData: any) => previousData === currentData
+  //         )
+  //         .size(1)
+  //         .crossValue((d: any) => d.x)
+  //         .mainValue((d: any) => d.y),
+  //     []
+  //   );
+
+  //   const zoom = useCallback(() => {
+  //     d3.zoom()
+  //       .scaleExtent([0.8, 10])
+  //       .on("zoom", (event: any) => {
+  //         // update the scales based on current zoom
+  //         console.log("zoom called");
+  //         xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
+  //         yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
+  //         redraw(chart);
+  //       });
+  //   }, [chart, redraw, xScale, xScaleOriginal, yScale, yScaleOriginal]);
+
+  //   const chart = useMemo(
+  //     () =>
+  //       fc
+  //         .chartCartesian(xScale, yScale)
+  //         .webglPlotArea(pointSeries)
+  //         .decorate((sel) =>
+  //           sel
+  //             .enter()
+  //             .selectAll(".plot-area")
+  //             .on("measure.range", (event: any) => {
+  //               xScaleOriginal.range([0, event.detail.width]);
+  //               yScaleOriginal.range([event.detail.height, 0]);
+  //             })
+  //             .call(zoom as any)
+  //         ),
+  //     [pointSeries, xScale, xScaleOriginal, yScale, yScaleOriginal, zoom]
+  //   );
 
   useEffect(() => {
-    console.log(props.data);
-    const xScale = d3.scaleLinear().domain([-50, 50]);
-    const yScale = d3.scaleLinear().domain([-50, 50]);
-    const xScaleOriginal = xScale.copy();
-    const yScaleOriginal = yScale.copy();
+    console.log("data", data);
+  }, [data]);
+
+  useEffect(() => {
+    console.log("set data called");
+    setData(props.data);
+  }, [props.data]);
+
+  useEffect(() => {
+    // console.log(props.data);
 
     const pointSeries = fc
       .seriesWebglPoint()
+      .equals(
+        (previousData: any, currentData: any) => previousData === currentData
+      )
+      .size(1)
       .crossValue((d: any) => d.x)
       .mainValue((d: any) => d.y);
 
@@ -45,10 +113,11 @@ const WebGLChart = (props: ChartProps) => {
       .scaleExtent([0.8, 10])
       .on("zoom", (event: any) => {
         // update the scales based on current zoom
+        console.log("zoom called");
         xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
         yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
-        redraw();
-      }) as any;
+        redraw(chart);
+      });
 
     const chart = fc
       .chartCartesian(xScale, yScale)
@@ -56,20 +125,29 @@ const WebGLChart = (props: ChartProps) => {
       .decorate((sel) =>
         sel
           .enter()
-          .select("d3fc-svg.plot-area")
-          .on("measure.range", (event) => {
+          .selectAll(".plot-area")
+          .on("measure.range", (event: any) => {
             xScaleOriginal.range([0, event.detail.width]);
             yScaleOriginal.range([event.detail.height, 0]);
           })
-          .call(zoom)
+          .call(zoom as any)
       );
-    const redraw = () => {
-      d3.select("#chart").datum(props.data).call(chart);
-    };
 
-    redraw();
-  }, [props.data, quadtree]);
-  return <div id="chart" className={props.className ?? ""}></div>;
+    redraw(chart);
+  }, [data, quadtree, redraw, xScale, xScaleOriginal, yScale, yScaleOriginal]);
+  return (
+    <>
+      <button
+        onClick={() => {
+          console.log("clicked", data);
+          setCallDraw((draw) => draw + 1);
+        }}
+      >
+        data
+      </button>
+      <div id="chart" className={props.className ?? ""}></div>
+    </>
+  );
 };
 
 export default WebGLChart;

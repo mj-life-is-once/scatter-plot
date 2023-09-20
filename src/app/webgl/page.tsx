@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 const WebGLChart = dynamic(() => import("../components/WebGLChart"), {
   ssr: false,
@@ -59,6 +60,15 @@ const Page = () => {
         </div>
         <WebGLChart className="px-10" data={bigData} />
       </div>
+      {/* <Suspense
+        fallback={
+          <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
+            <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+              Loading Data ...
+            </h1>
+          </div>
+        }
+      ></Suspense> */}
       {showLoading && (
         <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
@@ -71,9 +81,3 @@ const Page = () => {
 };
 
 export default Page;
-
-/*
-
-()();
-
-*/
