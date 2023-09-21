@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { BackButton } from "../components/BackButton";
 
 const WebGLChart = dynamic(() => import("../components/WebGLChart"), {
   ssr: false,
@@ -48,6 +48,7 @@ const Page = () => {
 
   return (
     <section className="relative w-full h-full bg-blue-400">
+      <BackButton className="top-20 left-10" />
       <div className="flex flex-col justify-center w-full h-full pt-20 mx-auto px-4 py-4 sm:px-6">
         <div className="text-center pb-12 md:pb-16">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
