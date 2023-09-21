@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { BackButton } from "../components/BackButton";
+import { Button } from "../components/Button";
 
 const WebGLChart = dynamic(() => import("../components/WebGLChart"), {
   ssr: false,
@@ -48,9 +48,11 @@ const Page = () => {
 
   return (
     <section className="relative w-full h-full bg-blue-400">
-      <BackButton className="top-20 left-10" />
+      <Button className="top-20 left-10" href="/">
+        Back
+      </Button>
       <div className="flex flex-col justify-center w-full h-full pt-20 mx-auto px-4 py-4 sm:px-6">
-        <div className="text-center pb-12 md:pb-16">
+        <div className="text-white text-center pb-12 md:pb-16">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
           </h1>
@@ -74,7 +76,7 @@ const Page = () => {
       </div>
       {showLoading && (
         <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+          <h1 className="text-white text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             Loading Data ...
           </h1>
         </div>

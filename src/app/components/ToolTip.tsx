@@ -36,12 +36,14 @@ const ToolTip = ({
   };
   return (
     <div
-      className={`text-center p-3 mx-2 my-1 max-w-2xl lg:max-w-xl rounded-md bg-emerald-green text-slate-900 ${
+      className={`text-center p-3 mx-2 my-1 max-w-2xl max-lg:max-w-xl max-md:max-w-md max-sm:max-w-sm max-xs:max-w-xs rounded bg-emerald-green text-slate-900 ${
         className || ""
       }}`}
     >
       <div className="text-center m-2 ">
-        <h3 className="md:text-4xl uppercase font-extrabold m-5">toolbox</h3>
+        <h3 className="max-sm:text-3xl text-4xl uppercase font-extrabold m-5">
+          toolbox
+        </h3>
         <ul className="max-w-xl text-center list-none m-auto">
           <li>Use Mouse-wheel to scroll</li>
           <li>Adjust radius to search more datapoints</li>

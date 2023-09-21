@@ -3,7 +3,7 @@ import path from "path";
 import { SampleData } from "../types/types";
 import Plotter from "../components/Plotter";
 import { parse } from "papaparse";
-import { BackButton } from "../components/BackButton";
+import { Button } from "../components/Button";
 
 const getCSVData = async (f: string) => {
   const filePath = path.join(process.cwd(), f);
@@ -42,7 +42,9 @@ const Page = async () => {
 
   return (
     <div className="relative bg-purple-600">
-      <BackButton className="inline-block text-center" />
+      <Button className="inline-block text-center" href="/">
+        Back
+      </Button>
       <Plotter data={promiseData} time={promiseTime.datetime} />
     </div>
   );
