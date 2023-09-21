@@ -9,9 +9,9 @@ export const Card = ({
 }) => {
   return (
     <div
-      className={`${
+      className={`rounded-lg drop-shadow-md max-w-xs max-h-md bg-white text-slate-600 p-10 hover:bg-emerald-green [&>a]:bg-yellow-300 ${
         className ?? ""
-      } rounded-lg drop-shadow-md max-w-xs max-h-md bg-white text-slate-600 p-10 hover:bg-emerald-green [&>a]:bg-yellow-300`}
+      } `}
     >
       {children}
     </div>
