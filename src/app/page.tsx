@@ -2,10 +2,10 @@ import { Card } from "./components/Card";
 import Link from "next/link";
 const Page = async () => {
   return (
-    <section className="relative w-full min-h-full bg-cyan-600">
-      <div className="container py-20 flex flex-col gap-10 h-full justify-around max-w-3xl mx-auto px-4 py-4 sm:px-6">
-        <div className="text-center pb-12 md:pb-16">
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
+    <section className="relative w-full py-10 min-h-full bg-cyan-600">
+      <div className="container flex flex-col gap-10 h-full justify-around max-w-3xl mx-auto px-4 py-4 sm:px-6">
+        <div className="text-center text-neutral-50 pb-12 md:pb-16">
+          <h1 className="text-emerald-green text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             D3JS Experiments
           </h1>
           <p className="text-lg max-w-md max-sm:max-w-xs mx-auto">

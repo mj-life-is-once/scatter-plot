@@ -51,3 +51,9 @@
     height: 30%;
   }
 }
+
+@media (max-width: 576px) {
+  .chartDiv {
+    max-width: 90%;
+  }
+}

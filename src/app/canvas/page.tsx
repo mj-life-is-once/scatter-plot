@@ -41,8 +41,8 @@ const Page = async () => {
   const [promiseData, promiseTime] = await Promise.all([sampleData, time]);
 
   return (
-    <div className="relative w-full bg-purple-600">
-      <BackButton />
+    <div className="relative bg-purple-600">
+      <BackButton className="inline-block text-center" />
       <Plotter data={promiseData} time={promiseTime.datetime} />
     </div>
   );
