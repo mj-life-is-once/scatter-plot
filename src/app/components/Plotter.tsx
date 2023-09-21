@@ -15,9 +15,15 @@ interface Props {
   time: string;
 }
 
-const darkTheme = createTheme({
+const theme = createTheme({
+  // palette: {
+  //   mode: "dark",
+  // },
   palette: {
-    mode: "dark",
+    primary: {
+      main: "#2a2a2a",
+    },
+    mode: "light",
   },
 });
 
@@ -31,18 +37,18 @@ const Plotter = (props: Props) => {
 
   return (
     <CanvasContextProvider>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Script
           type="text/javascript"
           src="https://unpkg.com/smiles-drawer@2.0.1/dist/smiles-drawer.min.js"
         />
-        <div className="flex flex-col my-10 text-center items-center justify-center">
+        <div className="flex flex-col py-10 text-center items-center justify-center">
           {/* <h3 className="my-1">{props.time}</h3> */}
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter">
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighte text-emerald-green">
             D3 Scatter Plot
           </h1>
-          <p className="text-lg max-w-md mx-auto font-extrabold text-slate-300">
+          <p className="text-lg max-w-md mx-auto font-extrabold">
             with (SVG + Canvas)
           </p>
           <div className="m-3">

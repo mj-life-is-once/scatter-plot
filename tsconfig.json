@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/hathi/.route_old.ts", "src/app/helper/streamingTSVParser.js", "src/app/helper/streamingTSVParser.js"],
   "exclude": ["node_modules"]
 }
