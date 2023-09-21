@@ -9,8 +9,8 @@ const Page = async () => {
             D3JS Experiments
           </h1>
           <p className="text-lg max-w-md mx-auto">
-            This page explores the different ways to visualise data despending
-            on the number of datapoints
+            This page explores the different ways to visualise data depending on
+            the number of datapoints
           </p>
           <p className="inline-block max-w-none mt-5 underline font-bold text-slate-300">
             <a

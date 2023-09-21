@@ -8,7 +8,7 @@ export const BackButton = ({ className }: { className?: string }) => {
         }`}
         href="/"
       >
-        Back Home
+        Back
       </Link>
     </>
   );
