@@ -248,6 +248,14 @@ const Canvas = ({
     };
 
     window.addEventListener("resize", handleResize);
+
+    // resize once the screen is smaller than outerWidth
+    if (window.innerWidth < outerWidth) {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
     return () => {
       window.removeEventListener("resize", handleResize);
     };
