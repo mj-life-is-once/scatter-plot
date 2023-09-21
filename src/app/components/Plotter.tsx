@@ -48,7 +48,7 @@ const Plotter = (props: Props) => {
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighte text-emerald-green">
             D3 Scatter Plot
           </h1>
-          <p className="text-lg max-w-md mx-auto font-extrabold">
+          <p className="text-white text-lg max-w-md mx-auto font-extrabold">
             with (SVG + Canvas)
           </p>
           <div className="m-3">

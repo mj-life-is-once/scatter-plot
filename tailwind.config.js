@@ -12,8 +12,6 @@ module.exports = {
     extend: {
       colors: {
         "emerald-green": "#00ffa2",
-        white: "#fff",
-        black: "#000",
       },
     },
   },
