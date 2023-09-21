@@ -67,13 +67,21 @@ const Canvas = ({
   );
 
   const maxDataX = useMemo(() => {
-    const max = d3.max(data, (d) => Math.round(d.x)) || canvasWidth;
+    const max =
+      d3.max(
+        data,
+        (d) => Math.round(d.x * Math.pow(10, 6)) / Math.pow(10, 6)
+      ) || canvasWidth;
     console.log(`maxX: ${max}`);
     return max;
   }, [canvasWidth, data]);
 
   const maxDataY = useMemo(() => {
-    const max = d3.max(data, (d) => Math.round(d.y)) || canvasHeight;
+    const max =
+      d3.max(
+        data,
+        (d) => Math.round(d.y * Math.pow(10, 6)) / Math.pow(10, 6)
+      ) || canvasHeight;
     console.log(`maxY: ${max}`);
     return max;
   }, [canvasHeight, data]);
