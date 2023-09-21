@@ -52,7 +52,7 @@ const Page = () => {
         Back
       </Button>
       <div className="flex flex-col justify-center w-full h-full pt-20 mx-auto px-4 py-4 sm:px-6">
-        <div className="text-center pb-12 md:pb-16">
+        <div className="text-white text-center pb-12 md:pb-16">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
           </h1>
