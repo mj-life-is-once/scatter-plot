@@ -1,8 +1,10 @@
 import { Card } from "./components/Card";
+import { Button } from "./components/Button";
 import Link from "next/link";
 const Page = async () => {
   return (
     <section className="relative w-full py-10 min-h-full bg-cyan-600">
+      <Button href="https://experiments.minjoocho.com/">Home</Button>
       <div className="container flex flex-col gap-10 h-full justify-around max-w-3xl mx-auto px-4 py-4 sm:px-6">
         <div className="text-center text-neutral-50 pb-12 md:pb-16">
           <h1 className="text-emerald-green text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
@@ -28,7 +30,7 @@ const Page = async () => {
             </h1>
             <p className="font-bold pb-10 text-lg">~10k datapoints</p>
             <Link
-              className="absolute right-10 bottom-5 inline-block font-bold text-xl"
+              className="absolute right-10 bottom-5 inline-block font-bold text-xl hover:underline"
               href="/canvas"
             >
               Explore
@@ -41,14 +43,14 @@ const Page = async () => {
             </h1>
             <p className="font-bold pb-10 text-lg">~1M datapoints</p>
             <Link
-              className="absolute right-10 bottom-5 inline-block font-bold text-xl"
+              className="absolute right-10 bottom-5 inline-block font-bold text-xl hover:underline"
               href="/webgl"
             >
               Explore
             </Link>
           </Card>
         </div>
-        <div className="text-center max-sm:max-w-xs m-auto">
+        <div className="text-white text-center max-sm:max-w-xs m-auto">
           <ul className="text-lg">
             Resource
             <li className="text-sm pt-2 underline">
