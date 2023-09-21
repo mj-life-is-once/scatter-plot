@@ -9,7 +9,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Script from "next/script";
 import { SampleData } from "../types/types";
-import { BackButton } from "./Button";
 
 interface Props {
   data: Array<SampleData>;

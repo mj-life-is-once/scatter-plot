@@ -36,7 +36,7 @@ const ToolTip = ({
   };
   return (
     <div
-      className={`text-center p-3 mx-2 my-1 max-w-2xl max-lg:max-w-xl max-md:max-w-md max-sm:max-w-sm rounded bg-emerald-green text-slate-900 ${
+      className={`text-center p-3 mx-2 my-1 max-w-2xl max-lg:max-w-xl max-md:max-w-md max-sm:max-w-sm max-xs:max-w-xs rounded bg-emerald-green text-slate-900 ${
         className || ""
       }}`}
     >

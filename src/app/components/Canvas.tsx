@@ -233,22 +233,21 @@ const Canvas = ({
   };
 
   useEffect(() => {
-    setDimensions({
-      width: chartContainerRef.current?.getClientRects()[0].width!,
-      height: chartContainerRef.current?.getClientRects()[0].height!,
-    });
-  }, [toolTipShow]);
+    console.log("canvas", canvasWidth, canvasHeight);
+  }, [canvasHeight, canvasWidth]);
 
   useEffect(() => {
     const handleResize = () => {
-      setDimensions({
-        width: chartContainerRef.current?.getClientRects()[0].width!,
-        height: chartContainerRef.current?.getClientRects()[0].height!,
-      });
+      console.log("window", window.innerWidth, window.innerHeight);
+      if (window.innerWidth < outerWidth) {
+        setDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      }
     };
 
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -392,12 +391,16 @@ const Canvas = ({
         className={c.chartDiv}
         ref={chartContainerRef}
         style={{
-          minWidth: `${outerWidth}px`,
-          minHeight: `${outerHeight}px`,
+          minWidth: `${dimensions.width}px`,
+          minHeight: `${dimensions.height}px`,
         }}
       >
         <div className={c.svgContainer}>
-          <svg width={dimensions.width} height={dimensions.height}>
+          <svg
+            width={dimensions.width}
+            height={dimensions.height}
+            viewBox={`0 0} ${dimensions.width} ${dimensions.height}`}
+          >
             <g id="axes" transform={`translate(${margin.left}, ${margin.top})`}>
               <g id="gxAxis" transform={`translate(0, ${canvasHeight})`}></g>
               <g id="gyAxis"></g>
