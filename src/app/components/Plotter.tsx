@@ -39,10 +39,6 @@ const Plotter = (props: Props) => {
     <CanvasContextProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Script
-          type="text/javascript"
-          src="https://unpkg.com/smiles-drawer@2.0.1/dist/smiles-drawer.min.js"
-        />
         <div className="flex flex-col py-10 text-center items-center justify-center">
           {/* <h3 className="my-1">{props.time}</h3> */}
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighte text-emerald-green">

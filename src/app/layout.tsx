@@ -22,7 +22,6 @@ export default function RootLayout({
       <Script src="//unpkg.com/custom-event-polyfill@0.3.0/custom-event-polyfill.js" />
       <Script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.8.0/document-register-element.js" />
       <body className={inter.className}>{children}</body>
-      {/* <Script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js" /> */}
     </html>
   );
 }

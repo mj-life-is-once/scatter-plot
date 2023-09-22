@@ -51,8 +51,8 @@ const Page = () => {
       <Button className="top-20 left-10" href="/">
         Back
       </Button>
-      <div className="flex flex-col justify-center w-full h-full pt-20 mx-auto px-4 py-4 sm:px-6">
-        <div className="text-white text-center pb-12 md:pb-16">
+      <div className="flex flex-col justify-center items-center w-full h-full pt-20 mx-auto px-4 sm:px-6">
+        <div className="text-white text-center pb-6">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
           </h1>
@@ -61,18 +61,18 @@ const Page = () => {
             on the number of datapoints
           </p>
 
-          <p className="text-sm  max-w-none mx-auto pt-5 text-slate-200">
-            The code is a reimplementation of{" "}
+          <p className="text-sm  max-w-none mx-auto py-5 text-slate-200">
+            This code is a reimplementation of{" "}
             <a
               className="underline text-emerald-green"
               href="https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer"
             >
               Colin Eberhardt&apos;s code
             </a>{" "}
-            into React
+            into NextJS(v13).
           </p>
         </div>
-        <WebGLChart className="px-10" data={bigData} />
+        <WebGLChart data={bigData} />
       </div>
       {showLoading && (
         <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
