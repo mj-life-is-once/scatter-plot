@@ -62,17 +62,34 @@ const Page = () => {
           </p>
 
           <p className="text-sm  max-w-none mx-auto pt-5 text-slate-200">
-            The code is a reimplementation of{" "}
+            This code is a reimplementation of{" "}
             <a
               className="underline text-emerald-green"
               href="https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer"
             >
               Colin Eberhardt&apos;s code
             </a>{" "}
-            into React
+            into NextJS(v13).
           </p>
         </div>
         <WebGLChart className="px-10" data={bigData} />
+        <div className="text-white text-center max-sm:max-w-xs m-auto">
+          <ul className="text-lg">
+            More Resource
+            <li className="text-sm pt-2 underline">
+              <a href="https://blog.scottlogic.com/2020/05/01/rendering-one-million-points-with-d3.html">
+                Rendering One Million Datapoints with D3 and WebGL by Scott
+                Logic
+              </a>
+            </li>
+            <li className="text-sm pt-2 underline">
+              <a href="https://blog.scottlogic.com/2020/05/01/rendering-one-million-points-with-d3.html">
+                Rendering One Million Datapoints with D3 and WebGL by Scott
+                Logic
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       {showLoading && (
         <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">

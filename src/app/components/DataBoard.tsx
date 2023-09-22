@@ -241,23 +241,6 @@ export function EnhancedRow({
   const isItemSelected = isSelected(row.x.toString());
   const labelId = useMemo(() => `enhanced-table-checkbox-${index}`, [index]);
 
-  const smilesDrawer = useMemo(() => {
-    /* all elements in javascript will be stored in window */
-    let options = { width: 250, height: 250 };
-    return new (window as any).SmilesDrawer.Drawer(options);
-  }, []);
-
-  // useEffect(() => {
-  //   //console.log(smilesDrawer);
-  //   (window as any).SmilesDrawer.parse(row.smiles, function (tree: any) {
-  //     // Draw to the canvas
-  //     smilesDrawer.draw(tree, `smile-canvas-${row.zinc_id}`, "dark", false);
-  //   });
-  // }),
-  //   [row.smiles, smilesDrawer];
-
-  //https://github.com/reymond-group/smilesDrawer
-
   return (
     <Fragment>
       <TableRow
@@ -292,8 +275,6 @@ export function EnhancedRow({
         <TableCell component="th" id={labelId} scope="row" padding="none">
           {row.x.toString()}
         </TableCell>
-        {/* <TableCell align="right">{row.smiles}</TableCell> */}
-        {/* <TableCell align="right">{row.x.toString()}</TableCell> */}
         <TableCell align="right">{row.y.toString()}</TableCell>
 
         <TableCell
@@ -303,20 +284,7 @@ export function EnhancedRow({
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            {/* <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Smiles
-              </Typography>
-              <div className={c.smiles}>
-                <p>{row.smiles}</p>
-                <canvas
-                  id={`smile-canvas-${row.zinc_id}`}
-                  className={c.smiles}
-                />
-              </div>
-            </Box> */}
-          </Collapse>
+          <Collapse in={open} timeout="auto" unmountOnExit></Collapse>
         </TableCell>
       </TableRow>
     </Fragment>

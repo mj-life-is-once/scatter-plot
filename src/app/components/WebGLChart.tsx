@@ -1,15 +1,16 @@
 "use client";
 import * as fc from "d3fc";
 import * as d3 from "d3";
+import { annotationCallout } from "d3-svg-annotation";
 import "./WebGLChart.css";
 import {
   //   distance,
-  trunc,
   hashCode,
   webglColor,
-  iterateElements,
+  createAnnotationData,
 } from "../helper/annotationHelper";
 import { HathiData } from "../types/types";
+import { seriesSvgAnnotation } from "../helper/annotationHelper";
 
 //https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer/blob/master/index.js
 
@@ -25,6 +26,7 @@ const WebGLChart = (props: ChartProps) => {
   const chartRef = useRef<any>(null);
   const dataRef = useRef<any>([]);
   const quadtreeRef = useRef<any>(null);
+  const annotationsRef = useRef<any>([]);
 
   const xScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
   const yScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
@@ -44,6 +46,12 @@ const WebGLChart = (props: ChartProps) => {
     []
   );
 
+  const annotationSeries = useMemo(
+    () =>
+      (seriesSvgAnnotation() as any).notePadding(15).type(annotationCallout),
+    []
+  );
+
   const chart = useMemo(
     () =>
       fc.chartCartesian(xScale, yScale).webglPlotArea(
@@ -52,19 +60,19 @@ const WebGLChart = (props: ChartProps) => {
           .seriesWebglMulti()
           .series([pointSeries])
           .mapping((d: any) => {
-            console.log("webplotArea", d.data.length);
+            // console.log("webplotArea", d.data.length);
             return d.data;
           })
       ),
     [pointSeries, xScale, yScale]
   )
-    // .svgPlotArea(
-    //   // only render the annotations series on the SVG layer
-    //   fc
-    //     .seriesSvgMulti()
-    //     .series([annotationSeries])
-    //     .mapping(d => d.annotations)
-    // )
+    .svgPlotArea(
+      // only render the annotations series on the SVG layer
+      fc
+        .seriesSvgMulti()
+        .series([annotationSeries])
+        .mapping((d: any) => d.annotations)
+    )
     .decorate((sel: any) =>
       sel
         .enter()
@@ -78,21 +86,19 @@ const WebGLChart = (props: ChartProps) => {
     );
 
   const redraw: any = useCallback(
-    async (data?: any, annotation?: any) => {
+    async (data?: any, annotations?: any) => {
       // Pass over data by parameter, otherwise it would only update the subsets of data
-      console.log("redraw", data.length);
-      chartRef.current.datum({ data }).call(chart);
+      // console.log("redraw", data.length);
+      chartRef.current.datum({ data, annotations }).call(chart);
     },
     [chart]
   );
-
-  const annotations = useMemo(() => [], []);
 
   // does not update
   const pointer = useMemo(
     () =>
       fc.pointer().on("point", ([coord]: any[]) => {
-        annotations.pop();
+        annotationsRef.current.pop();
 
         if (!coord || !quadtreeRef.current) {
           return;
@@ -113,18 +119,18 @@ const WebGLChart = (props: ChartProps) => {
 
         // if the closest point is within 20 pixels, show the annotation
         if (closestDatum) {
-          console.log(
-            "closestDatum",
-            // closestDatum.title,
-            closestDatum.x,
-            closestDatum.y
-          );
+          // console.log(
+          //   "closestDatum",
+          //   // closestDatum.title,
+          //   closestDatum.x,
+          //   closestDatum.y
+          // );
 
-          // console.log("quadtree", quadtreeRef.current.size());
-          redraw(dataRef.current);
+          annotationsRef.current[0] = createAnnotationData(closestDatum);
+          redraw(dataRef.current, annotationsRef.current);
         }
       }),
-    [annotations, redraw, xScale, yScale]
+    [redraw, xScale, yScale]
   );
 
   const zoom = useMemo(
@@ -138,35 +144,19 @@ const WebGLChart = (props: ChartProps) => {
           xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
           yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
 
-          console.log(
-            "on zoom",
-            d.data.length,
-            dataRef.current.length
-            // bigData.length
-          );
+          //console.log("on zoom", d.data.length, dataRef.current.length);
           // Note: need to pass the data as a paremeter in redraw function,
           // otherwise the data only shows the initial chunk of data loaded before.
-          redraw(d.data);
+          redraw(dataRef.current, annotationsRef.current);
         }),
     [redraw, xScale, xScaleOriginal, yScale, yScaleOriginal]
   );
 
-  // useEffect(() => {
-  //   console.log("check quadtree", quadtree.size());
-  // }, [quadtree]);
-
-  // useEffect(() => {
-  //   console.log("data", bigData);
-  // }, [bigData]);
-
   useEffect(() => {
-    console.log("set data called");
-    // setBigData(props.data);
     dataRef.current = props.data;
   }, [props.data]);
 
   useEffect(() => {
-    // console.log(props.data);
     chartRef.current = d3.select("#chart");
     dataRef.current = props.data;
 

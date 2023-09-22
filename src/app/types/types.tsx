@@ -1,15 +1,3 @@
-export interface ZyncData {
-  zinc_id: string;
-  smiles: string;
-  molecular_weight: number;
-  log_p: number;
-  num_heavy_atoms: number;
-  num_h_bond_acceptors: number;
-  num_h_bond_donors: number;
-  x: number;
-  y: number;
-}
-
 export interface HathiData {
   date: string;
   first_author_name: string;
