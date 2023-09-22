@@ -47,11 +47,11 @@ const Page = () => {
   }, []);
 
   return (
-    <section className="relative w-full h-full bg-blue-400">
+    <section className="relative w-full h-full overflow-auto bg-blue-400">
       <Button className="top-20 left-10" href="/">
         Back
       </Button>
-      <div className="flex flex-col justify-center items-center w-full h-full pt-20 mx-auto px-4 sm:px-6">
+      <div className="flex flex-col justify-center items-center w-full h-full pt-20 mx-auto px-4 sm:px-6 ">
         <div className="text-white text-center pb-6">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
@@ -75,7 +75,7 @@ const Page = () => {
         <WebGLChart data={bigData} />
       </div>
       {showLoading && (
-        <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
+        <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-screen bg-slate-900 bg-opacity-90 text-center">
           <h1 className="text-white text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             Loading Data ...
           </h1>
