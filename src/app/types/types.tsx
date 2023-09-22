@@ -20,19 +20,3 @@ export interface SampleData {
   x: number;
   y: number;
 }
-
-export interface D3Container {
-  width: number;
-  height: number;
-  data: Array<ZyncData>;
-  targetContainer: d3.Selection<SVGGElement, unknown, null, undefined>;
-}
-
-export interface Point {
-  x: number;
-  y: number;
-}
-
-export type D3Event<T extends Event, E extends Element> = T & {
-  currentTarget: E;
-};

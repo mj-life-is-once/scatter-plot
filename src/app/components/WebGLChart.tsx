@@ -2,9 +2,12 @@
 import * as fc from "d3fc";
 import * as d3 from "d3";
 import { annotationCallout } from "d3-svg-annotation";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import "./WebGLChart.css";
 import {
-  //   distance,
   hashCode,
   webglColor,
   createAnnotationData,
@@ -16,6 +19,17 @@ import { seriesSvgAnnotation } from "../helper/annotationHelper";
 
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 
+const theme = createTheme({
+  // palette: {
+  //   mode: "dark",
+  // },
+  palette: {
+    primary: {
+      main: "#ffffff",
+    },
+    mode: "light",
+  },
+});
 interface ChartProps {
   data: any[];
   className?: string;
@@ -27,6 +41,8 @@ const WebGLChart = (props: ChartProps) => {
   const dataRef = useRef<any>([]);
   const quadtreeRef = useRef<any>(null);
   const annotationsRef = useRef<any>([]);
+
+  const [colorScheme, setColorScheme] = useState("language");
 
   const xScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
   const yScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
@@ -174,63 +190,38 @@ const WebGLChart = (props: ChartProps) => {
 
     const languageFill = (d: any) =>
       webglColor(languageColorScale((hashCode(d.language) % 10).toString()));
-
     const yearFill = (d: any) => webglColor(yearColorScale(d.year));
 
+    const fillValue = colorScheme === "language" ? languageFill : yearFill;
     const fillColor = fc
       .webglFillColor()
-      .value(languageFill)
+      .value(fillValue)
       .data(dataRef.current);
     pointSeries.decorate((program: any) => fillColor(program));
-
-    // wire up the fill color selector
-    // iterateElements(".controls a", (el: any) => {
-    //   el.addEventListener("click", () => {
-    //     iterateElements(".controls a", (el2: any) =>
-    //       el2.classList.remove("active")
-    //     );
-    //     el.classList.add("active");
-    //     fillColor.value(el.id === "language" ? languageFill : yearFill);
-    //     redraw(bigData);
-    //   });
-    // });
-
     redraw(dataRef.current);
-  }, [chart, pointSeries, props.data, redraw]);
+  }, [chart, colorScheme, pointSeries, props.data, redraw]);
   return (
-    <>
-      <div id="chart" className={`relative ${props.className ?? ""}`}>
-        {/* <div className="absolute top-0 left-0">
-          <svg width="100" height="50">
-            <g>
-              <circle
-                fill="#000"
-                stroke="#fff"
-                r="10px"
-                // cx={(node as any).x}
-                // cy={(node as any).y}
-              >
-                <title>
-                  <title></title>
-                </title>
-              </circle>
-
-              <text
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                fontSize="1rem"
-                // x={(node as any).x}
-                // y={(node as any).y}
-                fill={"#ffffff"}
-                stroke="none"
-              >
-                data
-              </text>
-            </g>
-          </svg>
-        </div> */}
-      </div>
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <ToggleButtonGroup
+        className="mb-5"
+        color="primary"
+        size="small"
+        value={colorScheme}
+        exclusive
+        onChange={(event: React.MouseEvent<HTMLElement>, value: string) => {
+          setColorScheme(value);
+        }}
+        aria-label="Color By"
+      >
+        <ToggleButton value="language">Language</ToggleButton>
+        <ToggleButton value="year">Year</ToggleButton>
+      </ToggleButtonGroup>
+      <div
+        id="chart"
+        className={`relative max-w-2xl ${props.className ?? ""}`}
+      ></div>
+    </ThemeProvider>
   );
 };
 

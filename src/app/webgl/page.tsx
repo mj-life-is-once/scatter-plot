@@ -51,8 +51,8 @@ const Page = () => {
       <Button className="top-20 left-10" href="/">
         Back
       </Button>
-      <div className="flex flex-col justify-center w-full h-full pt-20 mx-auto px-4 py-4 sm:px-6">
-        <div className="text-white text-center pb-12 md:pb-16">
+      <div className="flex flex-col justify-center items-center w-full h-full pt-20 mx-auto px-4 sm:px-6">
+        <div className="text-white text-center pb-6">
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
             WebGL
           </h1>
@@ -61,7 +61,7 @@ const Page = () => {
             on the number of datapoints
           </p>
 
-          <p className="text-sm  max-w-none mx-auto pt-5 text-slate-200">
+          <p className="text-sm  max-w-none mx-auto py-5 text-slate-200">
             This code is a reimplementation of{" "}
             <a
               className="underline text-emerald-green"
@@ -72,24 +72,7 @@ const Page = () => {
             into NextJS(v13).
           </p>
         </div>
-        <WebGLChart className="px-10" data={bigData} />
-        <div className="text-white text-center max-sm:max-w-xs m-auto">
-          <ul className="text-lg">
-            More Resource
-            <li className="text-sm pt-2 underline">
-              <a href="https://blog.scottlogic.com/2020/05/01/rendering-one-million-points-with-d3.html">
-                Rendering One Million Datapoints with D3 and WebGL by Scott
-                Logic
-              </a>
-            </li>
-            <li className="text-sm pt-2 underline">
-              <a href="https://blog.scottlogic.com/2020/05/01/rendering-one-million-points-with-d3.html">
-                Rendering One Million Datapoints with D3 and WebGL by Scott
-                Logic
-              </a>
-            </li>
-          </ul>
-        </div>
+        <WebGLChart data={bigData} />
       </div>
       {showLoading && (
         <div className="absolute flex flex-col justify-center item-center bottom-0 left-0 w-full h-full bg-slate-900 bg-opacity-90 text-center">
