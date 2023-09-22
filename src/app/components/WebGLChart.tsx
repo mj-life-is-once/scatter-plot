@@ -20,19 +20,11 @@ interface ChartProps {
   className?: string;
 }
 const WebGLChart = (props: ChartProps) => {
-  const [bigData, setBigData] = useState(props.data);
-  // const [callDraw, setCallDraw] = useState(false);
+  // data and quadtree cannot be defined as useMemo as it's called
+  // before render and the data won't be updated once called
   const chartRef = useRef<any>(null);
-
-  const quadtree = useMemo(
-    () =>
-      d3
-        .quadtree()
-        .x((d: any) => d.x)
-        .y((d: any) => d.y)
-        .addAll(bigData),
-    [bigData]
-  );
+  const dataRef = useRef<any>([]);
+  const quadtreeRef = useRef<any>(null);
 
   const xScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
   const yScale = useMemo(() => d3.scaleLinear().domain([-50, 50]), []);
@@ -82,52 +74,57 @@ const WebGLChart = (props: ChartProps) => {
           yScaleOriginal.range([event.detail.height, 0]);
         })
         .call(zoom as any)
-        .call(
-          fc.pointer().on("point", ([coord]: any[]) => {
-            //   annotations.pop();
-
-            if (!coord || !quadtree) {
-              return;
-            }
-
-            // find the closes datapoint to the pointer
-            const x = xScale.invert(coord.x);
-            const y = yScale.invert(coord.y);
-            const radius = Math.abs(
-              xScale.invert(coord.x) - xScale.invert(coord.x - 20)
-            );
-
-            const closestDatum = quadtree.find(
-              x,
-              y,
-              radius
-            ) as unknown as HathiData;
-
-            // if the closest point is within 20 pixels, show the annotation
-            if (closestDatum) {
-              console.log(
-                "closestDatum",
-                // closestDatum.title,
-                closestDatum.x,
-                closestDatum.y
-              );
-
-              // only draw when there's data to show -> separate the canvas
-              // setCallDraw((prev) => !prev);
-              //console.log(data, data.bigData.length);
-              //redraw();
-            }
-          })
-        )
+        .call(pointer)
     );
 
   const redraw: any = useCallback(
-    async (data: any) => {
+    async (data?: any, annotation?: any) => {
       // Pass over data by parameter, otherwise it would only update the subsets of data
       console.log("redraw", data.length);
       chartRef.current.datum({ data }).call(chart);
     },
     [chart]
+  );
+
+  const annotations = useMemo(() => [], []);
+
+  // does not update
+  const pointer = useMemo(
+    () =>
+      fc.pointer().on("point", ([coord]: any[]) => {
+        annotations.pop();
+
+        if (!coord || !quadtreeRef.current) {
+          return;
+        }
+
+        // find the closes datapoint to the pointer
+        const x = xScale.invert(coord.x);
+        const y = yScale.invert(coord.y);
+        const radius = Math.abs(
+          xScale.invert(coord.x) - xScale.invert(coord.x - 20)
+        );
+
+        const closestDatum = quadtreeRef.current.find(
+          x,
+          y,
+          radius
+        ) as unknown as HathiData;
+
+        // if the closest point is within 20 pixels, show the annotation
+        if (closestDatum) {
+          console.log(
+            "closestDatum",
+            // closestDatum.title,
+            closestDatum.x,
+            closestDatum.y
+          );
+
+          // console.log("quadtree", quadtreeRef.current.size());
+          redraw(dataRef.current);
+        }
+      }),
+    [annotations, redraw, xScale, yScale]
   );
 
   const zoom = useMemo(
@@ -141,26 +138,44 @@ const WebGLChart = (props: ChartProps) => {
           xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
           yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
 
-          console.log("on zoom", d.data.length);
+          console.log(
+            "on zoom",
+            d.data.length,
+            dataRef.current.length
+            // bigData.length
+          );
           // Note: need to pass the data as a paremeter in redraw function,
           // otherwise the data only shows the initial chunk of data loaded before.
           redraw(d.data);
-          // setCallDraw((prev) => !prev);
         }),
     [redraw, xScale, xScaleOriginal, yScale, yScaleOriginal]
   );
-  useEffect(() => {
-    console.log("data", bigData);
-  }, [bigData]);
+
+  // useEffect(() => {
+  //   console.log("check quadtree", quadtree.size());
+  // }, [quadtree]);
+
+  // useEffect(() => {
+  //   console.log("data", bigData);
+  // }, [bigData]);
 
   useEffect(() => {
     console.log("set data called");
-    setBigData(props.data);
+    // setBigData(props.data);
+    dataRef.current = props.data;
   }, [props.data]);
 
   useEffect(() => {
     // console.log(props.data);
     chartRef.current = d3.select("#chart");
+    dataRef.current = props.data;
+
+    quadtreeRef.current = d3
+      .quadtree()
+      .x((d: any) => d.x)
+      .y((d: any) => d.y)
+      .addAll(props.data);
+
     const languageColorScale = d3.scaleOrdinal(d3.schemeCategory10);
     const yearColorScale = d3
       .scaleSequential()
@@ -172,7 +187,10 @@ const WebGLChart = (props: ChartProps) => {
 
     const yearFill = (d: any) => webglColor(yearColorScale(d.year));
 
-    const fillColor = fc.webglFillColor().value(languageFill).data(bigData);
+    const fillColor = fc
+      .webglFillColor()
+      .value(languageFill)
+      .data(dataRef.current);
     pointSeries.decorate((program: any) => fillColor(program));
 
     // wire up the fill color selector
@@ -187,17 +205,10 @@ const WebGLChart = (props: ChartProps) => {
     //   });
     // });
 
-    redraw(bigData);
-  }, [bigData, chart, pointSeries, redraw]);
+    redraw(dataRef.current);
+  }, [chart, pointSeries, props.data, redraw]);
   return (
     <>
-      {/* <button
-        onClick={() => {
-          setCallDraw((prev) => !prev);
-        }}
-      >
-        redraw
-      </button> */}
       <div id="chart" className={`relative ${props.className ?? ""}`}>
         {/* <div className="absolute top-0 left-0">
           <svg width="100" height="50">
