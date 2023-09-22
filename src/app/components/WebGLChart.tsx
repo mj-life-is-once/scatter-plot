@@ -142,6 +142,8 @@ const WebGLChart = (props: ChartProps) => {
           yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
 
           console.log("on zoom", d.data.length);
+          // Note: need to pass the data as a paremeter in redraw function,
+          // otherwise the data only shows the initial chunk of data loaded before.
           redraw(d.data);
           // setCallDraw((prev) => !prev);
         }),
@@ -184,6 +186,7 @@ const WebGLChart = (props: ChartProps) => {
     //     redraw(bigData);
     //   });
     // });
+
     redraw(bigData);
   }, [bigData, chart, pointSeries, redraw]);
   return (
