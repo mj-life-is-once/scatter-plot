@@ -407,7 +407,7 @@ const Canvas = ({
           <svg
             width={dimensions.width}
             height={dimensions.height}
-            viewBox={`0 0} ${dimensions.width} ${dimensions.height}`}
+            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
           >
             <g id="axes" transform={`translate(${margin.left}, ${margin.top})`}>
               <g id="gxAxis" transform={`translate(0, ${canvasHeight})`}></g>

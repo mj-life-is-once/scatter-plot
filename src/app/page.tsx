@@ -4,7 +4,9 @@ import Link from "next/link";
 const Page = async () => {
   return (
     <section className="relative w-full py-10 min-h-full bg-cyan-600">
-      <Button href="https://experiments.minjoocho.com/">Home</Button>
+      <Button href="https://experiments.minjoocho.com/blog/scatterplots">
+        Back
+      </Button>
       <div className="container flex flex-col gap-10 h-full justify-around max-w-3xl mx-auto px-4 py-4 sm:px-6">
         <div className="text-center text-neutral-50 pb-12 md:pb-16">
           <h1 className="text-emerald-green text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
